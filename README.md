@@ -66,7 +66,7 @@ If you're developing or testing locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ast-grep/claude-skill.git /path/to/local-marketplace
+git clone https://github.com/ast-grep/agent-skill.git /path/to/local-marketplace
 
 # Add as local marketplace
 /plugin marketplace add /path/to/local-marketplace
