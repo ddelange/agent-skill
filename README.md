@@ -78,7 +78,21 @@ git clone https://github.com/ast-grep/agent-skill.git /path/to/local-marketplace
 ## How to Use
 
 Once installed, ask Claude to search your code using structural patterns.
-Claude matches the skill against your query, so mentioning ast-grep or structural search ("Use ast-grep to find...") is the reliable way to invoke it.
+
+Installing the skill makes it **discovered**, not **preferred**.
+Claude Code loads it and matches its description against your query, but on any given search it is also holding a text-search tool that needs no setup, so it often takes that instead.
+Naming ast-grep or structural search ("Use ast-grep to find...") invokes the skill reliably.
+
+To get that preference without repeating it every query, state it once in your `AGENTS.md` or `CLAUDE.md`:
+
+```markdown
+You are operating in an environment where `ast-grep` is installed.
+For any code search that requires understanding of syntax or code structure, you should default to using `ast-grep --lang [language] -p '<pattern>'`.
+Adjust the `--lang` flag as needed for the specific programming language.
+Avoid using text-only search tools unless a plain-text search is explicitly requested.
+```
+
+See [Using ast-grep with AI Tools](https://ast-grep.github.io/advanced/prompting.html) for more on prompting, including feeding the docs to an agent and the MCP server.
 
 ### Example Queries
 
@@ -161,6 +175,12 @@ If a search isn't working as expected, ask Claude to:
 - Show you the ast-grep rule it created
 - Inspect the AST structure of your code
 - Test the rule against example code
+
+A zero-match run exits successfully, so "no results" and "wrong pattern" look identical.
+Two things help when a pattern is the suspect:
+
+- Load [`llms-full.txt`](https://ast-grep.github.io/llms-full.txt), the whole ast-grep documentation as one file, into the agent's context so it stops guessing at rule syntax.
+- Use [`ast-grep-mcp`](https://github.com/ast-grep/ast-grep-mcp) to let the agent dump the AST and test a pattern against a snippet, iterating instead of committing to one guess.
 
 ## Repository Structure
 
