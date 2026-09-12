@@ -56,9 +56,8 @@ npx skills add ast-grep/agent-skill
 /plugin install ast-grep
 ```
 
-3. **Restart Claude Code** to activate the plugin
-
-4. **Verify installation**: Use `/help` to see if ast-grep skill is available
+`/plugin install` activates the plugin in the running session, reporting `Installed ast-grep. Plugin is now active.`, so no restart is needed.
+Run `/plugin` to confirm it is listed.
 
 ### Option 3: Install Locally for Development
 
