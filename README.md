@@ -75,13 +75,10 @@ git clone https://github.com/ast-grep/agent-skill.git /path/to/local-marketplace
 /plugin install ast-grep
 ```
 
-### Usage Notes
-
-You will need to ask Claude to use this skill explicitly in your queries, like "Use ast-grep to find...". Claude Code, as of Nov 2025, cannot automatically detect when to use ast-grep for all appropriate use cases.
-
 ## How to Use
 
-Once installed, simply ask Claude to search your code using structural patterns. Claude will automatically use this skill when appropriate.
+Once installed, ask Claude to search your code using structural patterns.
+Claude matches the skill against your query, so mentioning ast-grep or structural search ("Use ast-grep to find...") is the reliable way to invoke it.
 
 ### Example Queries
 
@@ -170,18 +167,19 @@ If a search isn't working as expected, ask Claude to:
 This is a Claude Code plugin marketplace repository with the following structure:
 
 ```
-claude-skill/
+agent-skill/
 ├── .claude-plugin/
 │   └── marketplace.json           # Marketplace manifest
 ├── ast-grep/                       # ast-grep plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json            # Plugin manifest
 │   └── skills/
-│       └── ast-grep/
-│           ├── SKILL.md           # Skill instructions for Claude
-│           └── references/
-│               └── rule_reference.md  # ast-grep rule documentation
-├── ast-grep.zip                    # Archived version
+│       ├── ast-grep/
+│       │   ├── SKILL.md           # Skill instructions for Claude
+│       │   └── references/
+│       │       └── rule_reference.md  # ast-grep rule documentation
+│       └── outline/
+│           └── SKILL.md           # Structural codebase map skill
 └── README.md                       # This file
 ```
 
@@ -191,6 +189,7 @@ claude-skill/
 - **`ast-grep/.claude-plugin/plugin.json`**: Plugin manifest for the ast-grep plugin
 - **`ast-grep/skills/ast-grep/SKILL.md`**: Main skill instructions that Claude uses
 - **`ast-grep/skills/ast-grep/references/`**: Supporting documentation and reference materials
+- **`ast-grep/skills/outline/SKILL.md`**: Cheap structural map of a codebase, for exploring before reading full source
 
 ## Tips for Best Results
 

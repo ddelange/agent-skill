@@ -5,8 +5,8 @@
   "author": {
     "name": "Herrington Darkholme"
   },
-  "homepage": "https://github.com/ast-grep/claude-skill",
-  "repository": "https://github.com/ast-grep/claude-skill",
+  "homepage": "https://github.com/ast-grep/agent-skill",
+  "repository": "https://github.com/ast-grep/agent-skill",
   "license": "MIT",
   "keywords": [
     "ast-grep",
