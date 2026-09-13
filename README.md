@@ -56,9 +56,8 @@ npx skills add ast-grep/agent-skill
 /plugin install ast-grep
 ```
 
-3. **Restart Claude Code** to activate the plugin
-
-4. **Verify installation**: Use `/help` to see if ast-grep skill is available
+`/plugin install` activates the plugin in the running session, reporting `Installed ast-grep. Plugin is now active.`, so no restart is needed.
+Run `/plugin` to confirm it is listed.
 
 ### Option 3: Install Locally for Development
 
@@ -75,13 +74,24 @@ git clone https://github.com/ast-grep/agent-skill.git /path/to/local-marketplace
 /plugin install ast-grep
 ```
 
-### Usage Notes
-
-You will need to ask Claude to use this skill explicitly in your queries, like "Use ast-grep to find...". Claude Code, as of Nov 2025, cannot automatically detect when to use ast-grep for all appropriate use cases.
-
 ## How to Use
 
-Once installed, simply ask Claude to search your code using structural patterns. Claude will automatically use this skill when appropriate.
+Once installed, ask Claude to search your code using structural patterns.
+
+Installing the skill makes it **discovered**, not **preferred**.
+Claude Code loads it and matches its description against your query, but on any given search it is also holding a text-search tool that needs no setup, so it often takes that instead.
+Naming ast-grep or structural search ("Use ast-grep to find...") invokes the skill reliably.
+
+To get that preference without repeating it every query, state it once in your `AGENTS.md` or `CLAUDE.md`:
+
+```markdown
+You are operating in an environment where `ast-grep` is installed.
+For any code search that requires understanding of syntax or code structure, you should default to using `ast-grep --lang [language] -p '<pattern>'`.
+Adjust the `--lang` flag as needed for the specific programming language.
+Avoid using text-only search tools unless a plain-text search is explicitly requested.
+```
+
+See [Using ast-grep with AI Tools](https://ast-grep.github.io/advanced/prompting.html) for more on prompting, including feeding the docs to an agent and the MCP server.
 
 ### Example Queries
 
@@ -165,23 +175,30 @@ If a search isn't working as expected, ask Claude to:
 - Inspect the AST structure of your code
 - Test the rule against example code
 
+A zero-match run exits successfully, so "no results" and "wrong pattern" look identical.
+Two things help when a pattern is the suspect:
+
+- Load [`llms-full.txt`](https://ast-grep.github.io/llms-full.txt), the whole ast-grep documentation as one file, into the agent's context so it stops guessing at rule syntax.
+- Use [`ast-grep-mcp`](https://github.com/ast-grep/ast-grep-mcp) to let the agent dump the AST and test a pattern against a snippet, iterating instead of committing to one guess.
+
 ## Repository Structure
 
 This is a Claude Code plugin marketplace repository with the following structure:
 
 ```
-claude-skill/
+agent-skill/
 ├── .claude-plugin/
 │   └── marketplace.json           # Marketplace manifest
 ├── ast-grep/                       # ast-grep plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json            # Plugin manifest
 │   └── skills/
-│       └── ast-grep/
-│           ├── SKILL.md           # Skill instructions for Claude
-│           └── references/
-│               └── rule_reference.md  # ast-grep rule documentation
-├── ast-grep.zip                    # Archived version
+│       ├── ast-grep/
+│       │   ├── SKILL.md           # Skill instructions for Claude
+│       │   └── references/
+│       │       └── rule_reference.md  # ast-grep rule documentation
+│       └── outline/
+│           └── SKILL.md           # Structural codebase map skill
 └── README.md                       # This file
 ```
 
@@ -191,6 +208,7 @@ claude-skill/
 - **`ast-grep/.claude-plugin/plugin.json`**: Plugin manifest for the ast-grep plugin
 - **`ast-grep/skills/ast-grep/SKILL.md`**: Main skill instructions that Claude uses
 - **`ast-grep/skills/ast-grep/references/`**: Supporting documentation and reference materials
+- **`ast-grep/skills/outline/SKILL.md`**: Cheap structural map of a codebase, for exploring before reading full source
 
 ## Tips for Best Results
 
